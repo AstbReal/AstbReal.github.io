@@ -27,10 +27,13 @@ const yearOptions = [1, 3, 5, 10]
 // 弹窗状态
 const showPopup = ref(false)
 
-// 初始化树名
+// 初始化树名和价格
 onMounted(() => {
   if (route.query.treeName) {
     treeName.value = route.query.treeName
+  }
+  if (route.query.price) {
+    basePrice.value = parseInt(route.query.price)
   }
 })
 
@@ -52,7 +55,13 @@ const confirmAdopt = () => {
 // 关闭弹窗并跳转到我的树页面
 const closePopup = () => {
   showPopup.value = false
-  router.push('/my-tree')
+  router.push({
+    path: '/my-tree',
+    query: {
+      nickname: nickname.value || '用户',
+      treeName: treeNickname.value || '我的樱桃树'
+    }
+  })
 }
 </script>
 
@@ -127,162 +136,335 @@ const closePopup = () => {
 </template>
 
 <style scoped>
+/* 全局样式 */
+* {
+  font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  box-sizing: border-box;
+}
+
 .container {
   padding: 20px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #e8f5e9;
 }
 
+/* 顶部导航 */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
   position: relative;
+  height: 44px;
 }
 
 .back-button {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   padding: 0;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #333;
 }
 
 .header h1 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
+  color: #333;
 }
 
 .empty {
-  width: 40px;
+  width: 44px;
 }
 
+/* 表单容器 */
 .form-container {
   flex: 1;
 }
 
 .form-item {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
 }
 
 .form-item label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   font-size: 14px;
+  font-weight: 500;
   color: #666;
 }
 
+.form-item input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 14px;
+  background-color: white;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.form-item input:focus {
+  outline: none;
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
+}
+
+.form-item input::placeholder {
+  color: #999;
+}
+
+/* 年限选择 */
 .year-buttons {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
 .year-button {
   flex: 1;
   min-width: 80px;
-  padding: 10px;
-  border: 1px solid #ddd;
+  padding: 12px 16px;
+  border: 1px solid #e0e0e0;
   background-color: white;
-  color: #333;
-  border-radius: 8px;
+  color: #666;
+  border-radius: 12px;
   font-size: 14px;
+  font-weight: 500;
   text-align: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.year-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .year-button.active {
-  background-color: #4CAF50;
+  background-color: #2e7d32;
   color: white;
-  border-color: #4CAF50;
+  border-color: #2e7d32;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
 }
 
+/* 价格信息 */
 .price-info {
-  margin-top: 20px;
-  padding: 15px;
-  background-color: #f5f5f5;
-  border-radius: 8px;
+  margin-top: 24px;
+  padding: 16px;
+  background-color: white;
+  border-radius: 12px;
   text-align: center;
   font-size: 16px;
   font-weight: bold;
-  color: #4CAF50;
+  color: #2e7d32;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
+/* 底部按钮 */
 .bottom-button {
   margin-top: 30px;
   margin-bottom: 20px;
 }
 
-.bottom-button button {
+.btn-primary {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: #1b5e20;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+/* 弹窗 */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 80%;
+  min-width: 280px;
+}
+
+.popup-content h3 {
+  margin-bottom: 20px;
   font-size: 18px;
   font-weight: bold;
+  color: #333;
+}
+
+.popup-content button {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
   .header h1 {
-    font-size: 18px;
+    font-size: 16px;
   }
   
   .back-button {
-    font-size: 20px;
+    font-size: 18px;
+  }
+  
+  .form-item {
+    margin-bottom: 20px;
   }
   
   .form-item label {
-    font-size: 12px;
+    font-size: 13px;
+  }
+  
+  .form-item input {
+    padding: 12px 14px;
+    font-size: 13px;
   }
   
   .year-button {
-    padding: 8px;
-    font-size: 12px;
+    padding: 10px 14px;
+    font-size: 13px;
   }
   
   .price-info {
-    font-size: 14px;
+    padding: 14px;
+    font-size: 15px;
   }
   
-  .bottom-button button {
-    padding: 12px;
+  .btn-primary {
+    padding: 14px;
+    font-size: 15px;
+  }
+  
+  .popup-content {
+    padding: 24px;
+  }
+  
+  .popup-content h3 {
     font-size: 16px;
   }
 }
 
 @media (max-width: 480px) {
-  .header h1 {
-    font-size: 16px;
+  .container {
+    padding: 12px;
+  }
+  
+  .header {
+    height: 40px;
   }
   
   .back-button {
-    font-size: 18px;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+  }
+  
+  .header h1 {
+    font-size: 15px;
+  }
+  
+  .empty {
+    width: 40px;
+  }
+  
+  .form-item {
+    margin-bottom: 16px;
   }
   
   .form-item label {
-    font-size: 10px;
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+  
+  .form-item input {
+    padding: 10px 12px;
+    font-size: 12px;
+    border-radius: 10px;
+  }
+  
+  .year-buttons {
+    gap: 8px;
   }
   
   .year-button {
-    padding: 6px;
-    font-size: 10px;
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 10px;
   }
   
   .price-info {
-    font-size: 12px;
+    padding: 12px;
+    font-size: 13px;
+    border-radius: 10px;
   }
   
-  .bottom-button button {
-    padding: 10px;
+  .bottom-button {
+    margin-top: 24px;
+  }
+  
+  .btn-primary {
+    padding: 12px;
     font-size: 14px;
+    border-radius: 10px;
+  }
+  
+  .popup-content {
+    padding: 20px;
+    max-width: 90%;
+    min-width: 260px;
+  }
+  
+  .popup-content h3 {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .popup-content button {
+    padding: 10px;
+    font-size: 13px;
   }
 }
 </style>

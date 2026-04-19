@@ -92,63 +92,78 @@ const goBack = () => {
 </template>
 
 <style scoped>
+/* 全局样式 */
+* {
+  font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  box-sizing: border-box;
+}
+
 .container {
   padding: 20px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #e8f5e9;
 }
 
+/* 顶部导航 */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
   position: relative;
+  height: 44px;
 }
 
 .back-button {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   padding: 0;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #333;
 }
 
 .header h1 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   text-align: center;
   flex: 1;
-  margin: 0 40px;
+  margin: 0 44px;
+  color: #333;
 }
 
 .empty {
-  width: 40px;
+  width: 44px;
 }
 
+/* 说明部分 */
 .description {
-  background-color: #f5f5f5;
-  padding: 15px;
-  border-radius: 8px;
-  margin-bottom: 30px;
+  background-color: white;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .description p {
   font-size: 14px;
   line-height: 1.5;
   color: #666;
+  margin: 0;
 }
 
+/* 照料选项卡片 */
 .care-cards {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
   flex: 1;
 }
 
@@ -157,94 +172,192 @@ const goBack = () => {
   color: #333;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
   position: relative;
 }
 
 .care-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .care-card h3 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin: 0 0 10px 0;
+  color: #333;
 }
 
 .care-description {
   font-size: 14px;
   color: #666;
-  margin-bottom: 15px;
+  margin: 0 0 15px 0;
   line-height: 1.4;
 }
 
 .care-price {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
-  color: #4CAF50;
+  color: #2e7d32;
   position: absolute;
   bottom: 20px;
   right: 20px;
 }
 
+/* 底部按钮 */
 .bottom-button {
   margin-top: 30px;
   margin-bottom: 20px;
 }
 
-.bottom-button button {
+.btn-primary {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   font-size: 16px;
   font-weight: bold;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: #1b5e20;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+/* 弹窗 */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 80%;
+  min-width: 280px;
+}
+
+.popup-content h3 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.popup-content button {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
   .header h1 {
-    font-size: 18px;
+    font-size: 16px;
+    margin: 0 40px;
   }
   
   .back-button {
-    font-size: 20px;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .empty {
+    width: 40px;
+  }
+  
+  .description {
+    padding: 14px;
   }
   
   .description p {
-    font-size: 12px;
+    font-size: 13px;
   }
   
   .care-card h3 {
-    font-size: 16px;
+    font-size: 15px;
   }
   
   .care-description {
-    font-size: 12px;
+    font-size: 13px;
   }
   
   .care-price {
-    font-size: 16px;
+    font-size: 15px;
   }
   
-  .bottom-button button {
-    padding: 12px;
-    font-size: 14px;
+  .btn-primary {
+    padding: 14px;
+    font-size: 15px;
+  }
+  
+  .popup-content {
+    padding: 24px;
+  }
+  
+  .popup-content h3 {
+    font-size: 16px;
   }
 }
 
 @media (max-width: 480px) {
-  .header h1 {
-    font-size: 16px;
+  .container {
+    padding: 12px;
+  }
+  
+  .header {
+    height: 40px;
   }
   
   .back-button {
-    font-size: 18px;
+    font-size: 16px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .header h1 {
+    font-size: 15px;
+    margin: 0 40px;
+  }
+  
+  .empty {
+    width: 40px;
+  }
+  
+  .description {
+    padding: 12px;
   }
   
   .description p {
-    font-size: 10px;
+    font-size: 12px;
+  }
+  
+  .care-card {
+    padding: 16px;
   }
   
   .care-card h3 {
@@ -252,16 +365,39 @@ const goBack = () => {
   }
   
   .care-description {
-    font-size: 10px;
+    font-size: 12px;
   }
   
   .care-price {
     font-size: 14px;
+    bottom: 16px;
+    right: 16px;
   }
   
-  .bottom-button button {
+  .bottom-button {
+    margin-top: 24px;
+  }
+  
+  .btn-primary {
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+  
+  .popup-content {
+    padding: 20px;
+    max-width: 90%;
+    min-width: 260px;
+  }
+  
+  .popup-content h3 {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .popup-content button {
     padding: 10px;
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 </style>

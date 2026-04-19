@@ -148,50 +148,62 @@ const goBack = () => {
 </template>
 
 <style scoped>
+/* 全局样式 */
+* {
+  font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  box-sizing: border-box;
+}
+
 .container {
   padding: 20px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #e8f5e9;
 }
 
+/* 顶部导航 */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
   position: relative;
+  height: 44px;
 }
 
 .back-button {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   padding: 0;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #333;
 }
 
 .header h1 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   text-align: center;
   flex: 1;
-  margin: 0 40px;
+  margin: 0 44px;
+  color: #333;
 }
 
 .empty {
-  width: 40px;
+  width: 44px;
 }
 
+/* 日历区、时间段、联系电话 */
 .calendar-section,
 .time-section,
 .phone-section {
-  margin-bottom: 30px;
+  margin-bottom: 24px;
 }
 
 .calendar-section h2,
@@ -200,8 +212,10 @@ const goBack = () => {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 15px;
+  color: #333;
 }
 
+/* 日历网格 */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -215,28 +229,38 @@ const goBack = () => {
   padding: 10px;
   text-align: center;
   cursor: pointer;
-  border: 1px solid #ddd;
+  border: 1px solid #e0e0e0;
   transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .date-item:hover {
-  border-color: #4CAF50;
+  border-color: #2e7d32;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.1);
 }
 
 .date-item.selected {
-  background-color: #4CAF50;
+  background-color: #2e7d32;
   color: white;
-  border-color: #4CAF50;
+  border-color: #2e7d32;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
 }
 
 .date-item.today {
-  border-color: #2196F3;
+  border-color: #1976d2;
   font-weight: bold;
+  box-shadow: 0 1px 3px rgba(25, 118, 210, 0.2);
 }
 
 .date-month {
   font-size: 12px;
   margin-bottom: 5px;
+  color: #666;
+}
+
+.date-item.selected .date-month {
+  color: rgba(255, 255, 255, 0.8);
 }
 
 .date-day {
@@ -244,9 +268,10 @@ const goBack = () => {
   font-weight: bold;
 }
 
+/* 时间段选择 */
 .time-slots {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
@@ -256,59 +281,151 @@ const goBack = () => {
   padding: 12px;
   background-color: white;
   color: #333;
-  border: 1px solid #ddd;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
   text-align: center;
   cursor: pointer;
   transition: all 0.3s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  font-weight: 500;
 }
 
 .time-slot:hover {
-  border-color: #4CAF50;
+  border-color: #2e7d32;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.1);
 }
 
 .time-slot.selected {
-  background-color: #4CAF50;
+  background-color: #2e7d32;
   color: white;
-  border-color: #4CAF50;
+  border-color: #2e7d32;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
 }
 
+/* 联系电话输入框 */
+.phone-section input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 14px;
+  background-color: white;
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.phone-section input:focus {
+  outline: none;
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 2px rgba(46, 125, 50, 0.1);
+}
+
+.phone-section input::placeholder {
+  color: #999;
+}
+
+/* 底部按钮 */
 .bottom-button {
   margin-top: 30px;
   margin-bottom: 20px;
 }
 
-.bottom-button button {
+.btn-primary {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   font-size: 16px;
   font-weight: bold;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: #1b5e20;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+/* 预约成功弹窗 */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 80%;
+  min-width: 280px;
+}
+
+.popup-content h3 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
 }
 
 .appointment-code {
   margin: 20px 0;
-  padding: 15px;
+  padding: 16px;
   background-color: #f5f5f5;
-  border-radius: 8px;
+  border-radius: 12px;
   text-align: center;
   font-size: 18px;
   font-weight: bold;
+  color: #333;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.popup-content button {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
   .header h1 {
-    font-size: 18px;
+    font-size: 16px;
+    margin: 0 40px;
   }
   
   .back-button {
-    font-size: 20px;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .empty {
+    width: 40px;
   }
   
   .calendar-section h2,
   .time-section h2,
   .phone-section h2 {
-    font-size: 14px;
+    font-size: 15px;
   }
   
   .date-item {
@@ -325,33 +442,61 @@ const goBack = () => {
   
   .time-slot {
     padding: 10px;
-    font-size: 12px;
+    font-size: 13px;
   }
   
-  .bottom-button button {
-    padding: 12px;
-    font-size: 14px;
+  .phone-section input {
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+  
+  .btn-primary {
+    padding: 14px;
+    font-size: 15px;
   }
   
   .appointment-code {
-    padding: 12px;
+    padding: 14px;
+    font-size: 16px;
+  }
+  
+  .popup-content {
+    padding: 24px;
+  }
+  
+  .popup-content h3 {
     font-size: 16px;
   }
 }
 
 @media (max-width: 480px) {
-  .header h1 {
-    font-size: 16px;
+  .container {
+    padding: 12px;
+  }
+  
+  .header {
+    height: 40px;
   }
   
   .back-button {
-    font-size: 18px;
+    font-size: 16px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .header h1 {
+    font-size: 15px;
+    margin: 0 40px;
+  }
+  
+  .empty {
+    width: 40px;
   }
   
   .calendar-section h2,
   .time-section h2,
   .phone-section h2 {
-    font-size: 12px;
+    font-size: 14px;
   }
   
   .date-item {
@@ -366,19 +511,47 @@ const goBack = () => {
     font-size: 12px;
   }
   
-  .time-slot {
-    padding: 8px;
-    font-size: 10px;
+  .time-slots {
+    gap: 8px;
   }
   
-  .bottom-button button {
-    padding: 10px;
+  .time-slot {
+    padding: 8px;
     font-size: 12px;
   }
   
-  .appointment-code {
-    padding: 10px;
+  .phone-section input {
+    padding: 10px 12px;
+    font-size: 12px;
+    border-radius: 10px;
+  }
+  
+  .btn-primary {
+    padding: 12px;
     font-size: 14px;
+    border-radius: 10px;
+  }
+  
+  .appointment-code {
+    padding: 12px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+  
+  .popup-content {
+    padding: 20px;
+    max-width: 90%;
+    min-width: 260px;
+  }
+  
+  .popup-content h3 {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .popup-content button {
+    padding: 10px;
+    font-size: 13px;
   }
 }
 </style>

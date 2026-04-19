@@ -15,14 +15,43 @@ const myStall = {
   isMature: false // 未成熟，按钮不可点击
 }
 
+// 计算市场价格（根据认养价格和时间折扣）
+const getMarketPrice = (basePrice, fruitName) => {
+  // 基础价格系数
+  const priceFactors = {
+    '樱桃': 0.2,
+    '梨': 0.06,
+    '黄金油蟠': 0.13,
+    '阳光玫瑰': 0.17,
+    '红美人果冻橙': 0.13,
+    '国庆一号无核蜜橘': 0.11
+  }
+  
+  // 检查是否是优惠时间（假设每天的9点到18点为优惠时间）
+  const now = new Date()
+  const hour = now.getHours()
+  const isDiscountTime = hour >= 9 && hour < 18
+  
+  // 以下水果在优惠时间有8折优惠
+  const discountFruits = ['樱桃', '梨', '黄金油蟠']
+  
+  let price = basePrice * priceFactors[fruitName] || 20
+  
+  if (isDiscountTime && discountFruits.includes(fruitName)) {
+    price = price * 0.8
+  }
+  
+  return Math.round(price * 10) / 10
+}
+
 // 市集商品
 const marketItems = [
-  { id: 1, name: '苹果', price: 19.9, stallName: '快乐果园', image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=fresh%20apples%2C%20red%2C%20high%20quality%20photo&image_size=square' },
-  { id: 2, name: '梨', price: 15.9, stallName: '梨园春色', image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=fresh%20pears%2C%20yellow%2C%20high%20quality%20photo&image_size=square' },
-  { id: 3, name: '桃子', price: 22.9, stallName: '桃花园', image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=fresh%20peaches%2C%20pink%20and%20yellow%2C%20high%20quality%20photo&image_size=square' },
-  { id: 4, name: '葡萄', price: 29.9, stallName: '葡萄园', image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=fresh%20grapes%2C%20purple%2C%20high%20quality%20photo&image_size=square' },
-  { id: 5, name: '草莓', price: 39.9, stallName: '草莓园', image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=fresh%20strawberries%2C%20red%2C%20high%20quality%20photo&image_size=square' },
-  { id: 6, name: '蓝莓', price: 49.9, stallName: '蓝莓园', image: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=fresh%20blueberries%2C%20blue%2C%20high%20quality%20photo&image_size=square' }
+  { id: 1, name: '樱桃', price: getMarketPrice(199, '樱桃'), stallName: '樱桃园', image: '/images/cherry-tree-landscape.jpg' },
+  { id: 2, name: '梨', price: getMarketPrice(249, '梨'), stallName: '梨园春色', image: '/images/pear-tree.jpg' },
+  { id: 3, name: '黄金油蟠', price: getMarketPrice(229, '黄金油蟠'), stallName: '桃花园', image: '/images/peach-tree.jpg' },
+  { id: 4, name: '阳光玫瑰', price: getMarketPrice(299, '阳光玫瑰'), stallName: '葡萄园', image: '/images/grape-tree.jpg' },
+  { id: 5, name: '红美人果冻橙', price: getMarketPrice(269, '红美人果冻橙'), stallName: '橙子园', image: '/images/orange-tree.jpg' },
+  { id: 6, name: '国庆一号无核蜜橘', price: getMarketPrice(239, '国庆一号无核蜜橘'), stallName: '橘子园', image: '/images/tangerine-tree.jpg' }
 ]
 
 // 打开弹窗
@@ -147,49 +176,61 @@ const goBack = () => {
 </template>
 
 <style scoped>
+/* 全局样式 */
+* {
+  font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  box-sizing: border-box;
+}
+
 .container {
   padding: 20px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   position: relative;
+  background-color: #e8f5e9;
 }
 
+/* 顶部导航 */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
   position: relative;
+  height: 44px;
 }
 
 .back-button {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   padding: 0;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #333;
 }
 
 .header h1 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   text-align: center;
   flex: 1;
-  margin: 0 40px;
+  margin: 0 44px;
+  color: #333;
 }
 
 .empty {
-  width: 40px;
+  width: 44px;
 }
 
+/* 搜索框 */
 .search-section {
-  margin-bottom: 30px;
+  margin-bottom: 24px;
 }
 
 .search-box {
@@ -200,8 +241,14 @@ const goBack = () => {
   display: flex;
   align-items: center;
   gap: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .search-icon {
@@ -214,19 +261,21 @@ const goBack = () => {
   font-size: 14px;
 }
 
+/* 我的摊位 */
 .my-stall {
   background-color: white;
   color: #333;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 24px;
 }
 
 .my-stall h2 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   margin-bottom: 15px;
+  color: #333;
 }
 
 .stall-info {
@@ -237,33 +286,50 @@ const goBack = () => {
 
 .stall-details p {
   font-size: 14px;
-  margin-bottom: 5px;
+  margin: 0 0 5px 0;
   color: #666;
 }
 
 .sell-button {
   padding: 10px 20px;
-  background-color: #4CAF50;
+  background-color: #2e7d32;
   color: white;
   border-radius: 8px;
   font-size: 14px;
   font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
+}
+
+.sell-button:hover {
+  background-color: #1b5e20;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
 }
 
 .sell-button.disabled {
   background-color: #ddd;
   cursor: not-allowed;
+  box-shadow: none;
 }
 
+.sell-button.disabled:hover {
+  transform: none;
+}
+
+/* 市集商品区 */
 .market-section {
   flex: 1;
   margin-bottom: 100px; /* 为悬浮按钮留出空间 */
 }
 
 .market-section h2 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   margin-bottom: 15px;
+  color: #333;
 }
 
 .market-grid {
@@ -277,14 +343,14 @@ const goBack = () => {
   color: #333;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   cursor: pointer;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .market-item:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .item-image {
@@ -294,27 +360,30 @@ const goBack = () => {
 }
 
 .item-info {
-  padding: 10px;
+  padding: 12px;
 }
 
 .item-info h3 {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
-  margin-bottom: 5px;
+  margin: 0 0 5px 0;
+  color: #333;
 }
 
 .item-price {
   font-size: 14px;
   font-weight: bold;
-  color: #4CAF50;
-  margin-bottom: 5px;
+  color: #2e7d32;
+  margin: 0 0 5px 0;
 }
 
 .item-stall {
   font-size: 12px;
   color: #999;
+  margin: 0;
 }
 
+/* 悬浮按钮 */
 .floating-button {
   position: fixed;
   bottom: 80px;
@@ -323,15 +392,27 @@ const goBack = () => {
   z-index: 100;
 }
 
-.floating-button button {
+.btn-primary {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   font-size: 16px;
   font-weight: bold;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
   border-radius: 25px;
-  box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(46, 125, 50, 0.3);
 }
 
+.btn-primary:hover {
+  background-color: #1b5e20;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(46, 125, 50, 0.4);
+}
+
+/* 底部平台提示 */
 .platform-tip {
   position: fixed;
   bottom: 20px;
@@ -341,17 +422,70 @@ const goBack = () => {
   font-size: 12px;
   color: #999;
   padding: 10px;
-  background-color: #f5f5f5;
+  background-color: white;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.platform-tip p {
+  margin: 0;
+}
+
+/* 弹窗 */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 80%;
+  min-width: 280px;
+}
+
+.popup-content h3 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.popup-content button {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
   .header h1 {
-    font-size: 18px;
+    font-size: 16px;
+    margin: 0 40px;
   }
   
   .back-button {
-    font-size: 20px;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .empty {
+    width: 40px;
   }
   
   .search-box {
@@ -368,16 +502,16 @@ const goBack = () => {
   
   .my-stall h2,
   .market-section h2 {
-    font-size: 16px;
+    font-size: 15px;
   }
   
   .stall-details p {
-    font-size: 12px;
+    font-size: 13px;
   }
   
   .sell-button {
     padding: 8px 16px;
-    font-size: 12px;
+    font-size: 13px;
   }
   
   .item-image {
@@ -385,35 +519,58 @@ const goBack = () => {
   }
   
   .item-info h3 {
-    font-size: 14px;
+    font-size: 13px;
   }
   
   .item-price {
-    font-size: 12px;
+    font-size: 13px;
   }
   
   .item-stall {
-    font-size: 10px;
+    font-size: 11px;
   }
   
-  .floating-button button {
-    padding: 12px;
-    font-size: 14px;
+  .btn-primary {
+    padding: 14px;
+    font-size: 15px;
   }
   
   .platform-tip {
     font-size: 10px;
     padding: 8px;
   }
+  
+  .popup-content {
+    padding: 24px;
+  }
+  
+  .popup-content h3 {
+    font-size: 16px;
+  }
 }
 
 @media (max-width: 480px) {
-  .header h1 {
-    font-size: 16px;
+  .container {
+    padding: 12px;
+  }
+  
+  .header {
+    height: 40px;
   }
   
   .back-button {
-    font-size: 18px;
+    font-size: 16px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .header h1 {
+    font-size: 15px;
+    margin: 0 40px;
+  }
+  
+  .empty {
+    width: 40px;
   }
   
   .search-box {
@@ -428,22 +585,30 @@ const goBack = () => {
     font-size: 10px;
   }
   
+  .my-stall {
+    padding: 16px;
+  }
+  
   .my-stall h2,
   .market-section h2 {
     font-size: 14px;
   }
   
   .stall-details p {
-    font-size: 10px;
+    font-size: 12px;
   }
   
   .sell-button {
     padding: 6px 12px;
-    font-size: 10px;
+    font-size: 12px;
   }
   
   .item-image {
     height: 80px;
+  }
+  
+  .item-info {
+    padding: 10px;
   }
   
   .item-info h3 {
@@ -451,21 +616,37 @@ const goBack = () => {
   }
   
   .item-price {
-    font-size: 10px;
-  }
-  
-  .item-stall {
-    font-size: 8px;
-  }
-  
-  .floating-button button {
-    padding: 10px;
     font-size: 12px;
   }
   
+  .item-stall {
+    font-size: 10px;
+  }
+  
+  .btn-primary {
+    padding: 12px;
+    font-size: 14px;
+  }
+  
   .platform-tip {
-    font-size: 8px;
+    font-size: 9px;
     padding: 6px;
+  }
+  
+  .popup-content {
+    padding: 20px;
+    max-width: 90%;
+    min-width: 260px;
+  }
+  
+  .popup-content h3 {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .popup-content button {
+    padding: 10px;
+    font-size: 13px;
   }
 }
 </style>

@@ -1,19 +1,45 @@
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 
 const router = useRouter()
+const route = useRoute()
 
 // 树状态
-const isSeed = ref(true)
 const treeName = ref('我的樱桃树')
 const userName = ref('用户')
-const healthValue = ref(85)
-const growthProgress = ref(60)
+const healthValue = ref(50)
+const growthProgress = ref(0)
+
+// 根据成长进度计算当前阶段
+const treeStage = computed(() => {
+  if (growthProgress.value < 20) {
+    return 'seed' // 种子阶段
+  } else if (growthProgress.value < 70) {
+    return 'seedling' // 幼苗阶段
+  } else {
+    return 'adult' // 成年阶段
+  }
+})
+
+// 根据阶段获取对应的树图片
+const treeImage = computed(() => {
+  switch (treeStage.value) {
+    case 'seed':
+      return '/images/seed.jpg'
+    case 'seedling':
+      return '/images/seedling.jpg'
+    case 'adult':
+      return '/images/adult-tree.jpg'
+    default:
+      return '/images/seed.jpg'
+  }
+})
 
 // 弹窗状态
 const showPopup = ref(false)
 const popupMessage = ref('')
+const showMarketPopup = ref(false) // 进入市集的弹窗
 
 // 季节背景（默认夏季）
 const season = ref('summer')
@@ -21,11 +47,28 @@ const season = ref('summer')
 // 按钮状态
 const isFertilizerEnabled = ref(true) // 施肥/除虫按钮是否可用
 
-// 模拟种子发芽动画
+// 初始化
 onMounted(() => {
-  setTimeout(() => {
-    isSeed.value = false
-  }, 2000)
+  // 从sessionStorage中获取用户昵称和树名
+  const savedNickname = sessionStorage.getItem('userName')
+  const savedTreeName = sessionStorage.getItem('treeName')
+  
+  // 优先使用sessionStorage中的数据，如果没有则使用URL参数
+  if (savedNickname) {
+    userName.value = savedNickname
+  } else if (route.query.nickname) {
+    userName.value = route.query.nickname
+    // 保存到sessionStorage
+    sessionStorage.setItem('userName', route.query.nickname)
+  }
+  
+  if (savedTreeName) {
+    treeName.value = savedTreeName
+  } else if (route.query.treeName) {
+    treeName.value = route.query.treeName
+    // 保存到sessionStorage
+    sessionStorage.setItem('treeName', route.query.treeName)
+  }
 })
 
 // 打开弹窗
@@ -41,14 +84,40 @@ const closePopup = () => {
 
 // 浇水
 const waterTree = () => {
-  openPopup('演示版：浇水功能')
+  // 增加健康值，最多100
+  healthValue.value = Math.min(healthValue.value + 10, 100)
+  // 增加成长进度，最多100
+  growthProgress.value = Math.min(growthProgress.value + 5, 100)
+  
+  // 检查是否达到100%
+  if (growthProgress.value >= 100) {
+    showMarketPopup.value = true
+  } else {
+    openPopup('演示版：浇水功能')
+  }
 }
 
 // 施肥/除虫
 const fertilizeTree = () => {
   if (isFertilizerEnabled.value) {
-    openPopup('演示版：施肥/除虫功能')
+    // 增加健康值，最多100
+    healthValue.value = Math.min(healthValue.value + 15, 100)
+    // 增加成长进度，最多100
+    growthProgress.value = Math.min(growthProgress.value + 8, 100)
+    
+    // 检查是否达到100%
+    if (growthProgress.value >= 100) {
+      showMarketPopup.value = true
+    } else {
+      openPopup('演示版：施肥/除虫功能')
+    }
   }
+}
+
+// 关闭进入市集弹窗并跳转
+const closeMarketPopup = () => {
+  showMarketPopup.value = false
+  router.push('/market')
 }
 
 // 邀请共养
@@ -64,6 +133,11 @@ const makeAppointment = () => {
 // 进入市集
 const goToMarket = () => {
   router.push('/market')
+}
+
+// 回到认养界面
+const goToAdopt = () => {
+  router.push('/')
 }
 </script>
 
@@ -89,12 +163,9 @@ const goToMarket = () => {
 
     <!-- 中央3D区 -->
     <div class="tree-container">
-      <div v-if="isSeed" class="seed-container">
-        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=seed%20in%20a%20pot%2C%20cute%20cartoon%20style%2C%20white%20background&image_size=square" alt="种子" class="seed-image" />
-      </div>
-      <div v-else class="tree-image-container">
-        <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute%20cartoon%20cherry%20tree%20with%20fruits%2C%20white%20background&image_size=square" alt="樱桃树" class="tree-image" />
-      </div>
+      <transition name="fade" mode="out-in">
+        <img :key="treeStage" :src="treeImage" :alt="treeName" class="tree-image" />
+      </transition>
     </div>
 
     <!-- 下方按钮 -->
@@ -129,6 +200,13 @@ const goToMarket = () => {
       </button>
     </div>
 
+    <!-- 回到认养界面按钮 -->
+    <div class="adopt-entry">
+      <button class="btn-secondary" @click="goToAdopt">
+        回到认养界面
+      </button>
+    </div>
+
     <!-- 弹窗 -->
     <div v-if="showPopup" class="popup">
       <div class="popup-content">
@@ -138,10 +216,27 @@ const goToMarket = () => {
         </button>
       </div>
     </div>
+
+    <!-- 进入市集弹窗 -->
+    <div v-if="showMarketPopup" class="popup">
+      <div class="popup-content">
+        <h3>恭喜！您的树已经成熟了！</h3>
+        <p>现在可以进入水果市集查看和售卖您的果实了。</p>
+        <button class="btn-primary" @click="closeMarketPopup">
+          进入水果市集
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
 <style scoped>
+/* 全局样式 */
+* {
+  font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  box-sizing: border-box;
+}
+
 .container {
   padding: 20px;
   min-height: 100vh;
@@ -149,11 +244,12 @@ const goToMarket = () => {
   flex-direction: column;
   align-items: center;
   transition: background-color 0.5s ease;
+  background-color: #e8f5e9;
 }
 
 /* 季节背景 */
 .container.summer {
-  background-color: #e8f5e8;
+  background-color: #e8f5e9;
 }
 
 .container.spring {
@@ -168,6 +264,7 @@ const goToMarket = () => {
   background-color: #e3f2fd;
 }
 
+/* 树信息 */
 .tree-info {
   width: 100%;
   text-align: center;
@@ -178,6 +275,7 @@ const goToMarket = () => {
   font-size: 24px;
   font-weight: bold;
   margin-bottom: 5px;
+  color: #333;
 }
 
 .tree-info p {
@@ -186,17 +284,20 @@ const goToMarket = () => {
   margin-bottom: 20px;
 }
 
+/* 健康值和成长进度 */
 .health-bar,
 .growth-bar {
   margin-bottom: 15px;
+  text-align: left;
 }
 
 .health-bar span,
 .growth-bar span {
   display: block;
   font-size: 14px;
-  margin-bottom: 5px;
-  text-align: left;
+  margin-bottom: 8px;
+  color: #666;
+  font-weight: 500;
 }
 
 .progress-container {
@@ -205,38 +306,52 @@ const goToMarket = () => {
   background-color: #f0f0f0;
   border-radius: 5px;
   overflow: hidden;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .progress-bar {
   height: 100%;
-  background-color: #4CAF50;
+  background-color: #2e7d32;
   border-radius: 5px;
   transition: width 0.3s ease;
 }
 
 .progress-bar.growth {
-  background-color: #2196F3;
+  background-color: #1976d2;
 }
 
+/* 树容器 */
 .tree-container {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
-  max-width: 300px;
+  max-width: 500px;
 }
 
 .seed-image,
 .tree-image {
-  width: 200px;
-  height: 200px;
+  width: 500px;
+  height: 500px;
   object-fit: contain;
   transition: transform 0.5s ease;
 }
 
 .tree-image {
   animation: grow 1s ease-out;
+}
+
+/* 过渡动画 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: scale(0.8);
 }
 
 @keyframes grow {
@@ -250,6 +365,7 @@ const goToMarket = () => {
   }
 }
 
+/* 按钮容器 */
 .button-container {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -268,13 +384,15 @@ const goToMarket = () => {
   background-color: white;
   color: #333;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
 }
 
 .action-button:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .action-button.disabled {
@@ -289,22 +407,111 @@ const goToMarket = () => {
 
 .action-button span {
   font-size: 14px;
+  font-weight: 500;
 }
 
+/* 进入市集按钮 */
 .market-entry {
   width: 100%;
   margin-bottom: 20px;
 }
 
-.market-entry button {
+.btn-primary {
   width: 100%;
-  padding: 15px;
+  padding: 16px;
   font-size: 16px;
   font-weight: bold;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
+}
+
+.btn-primary:hover {
+  background-color: #1b5e20;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+/* 回到认养界面按钮 */
+.adopt-entry {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.btn-secondary {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: bold;
+  background-color: white;
+  color: #2e7d32;
+  border: 2px solid #2e7d32;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.btn-secondary:hover {
+  background-color: #f1f8e9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.15);
+}
+
+/* 弹窗 */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 80%;
+  min-width: 280px;
+}
+
+.popup-content h3 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.popup-content p {
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.5;
+}
+
+.popup-content button {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
   .tree-info h1 {
     font-size: 20px;
   }
@@ -336,13 +543,30 @@ const goToMarket = () => {
     font-size: 12px;
   }
   
-  .market-entry button {
-    padding: 12px;
+  .btn-primary {
+    padding: 14px;
     font-size: 14px;
+  }
+  
+  .btn-secondary {
+    padding: 14px;
+    font-size: 14px;
+  }
+  
+  .popup-content {
+    padding: 24px;
+  }
+  
+  .popup-content h3 {
+    font-size: 16px;
   }
 }
 
 @media (max-width: 480px) {
+  .container {
+    padding: 12px;
+  }
+  
   .tree-info h1 {
     font-size: 18px;
   }
@@ -374,9 +598,32 @@ const goToMarket = () => {
     font-size: 10px;
   }
   
-  .market-entry button {
-    padding: 10px;
+  .btn-primary {
+    padding: 12px;
     font-size: 12px;
+    border-radius: 10px;
+  }
+  
+  .btn-secondary {
+    padding: 12px;
+    font-size: 12px;
+    border-radius: 10px;
+  }
+  
+  .popup-content {
+    padding: 20px;
+    max-width: 90%;
+    min-width: 260px;
+  }
+  
+  .popup-content h3 {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .popup-content button {
+    padding: 10px;
+    font-size: 13px;
   }
 }
 </style>

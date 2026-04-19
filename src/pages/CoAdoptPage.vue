@@ -9,9 +9,9 @@ const showPopup = ref(false)
 
 // 共养成员
 const coAdopters = [
-  { id: 1, name: '张三', avatar: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=user%20avatar%2C%20cartoon%20style%2C%20male%2C%20friendly%20face&image_size=square' },
-  { id: 2, name: '李四', avatar: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=user%20avatar%2C%20cartoon%20style%2C%20female%2C%20friendly%20face&image_size=square' },
-  { id: 3, name: '王五', avatar: 'https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=user%20avatar%2C%20cartoon%20style%2C%20male%2C%20glasses&image_size=square' }
+  { id: 1, name: '张三', avatar: '/images/avatar.jpg' },
+  { id: 2, name: '李四', avatar: '/images/avatar.jpg' },
+  { id: 3, name: '王五', avatar: '/images/avatar.jpg' }
 ]
 
 // 打开弹窗
@@ -43,7 +43,7 @@ const goBack = () => {
 
     <!-- 中部小树卡片 -->
     <div class="tree-card">
-      <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cute%20cartoon%20cherry%20tree%20with%20fruits%2C%20white%20background&image_size=square" alt="樱桃树" class="tree-image" />
+      <img src="/images/cherry-tree.jpg" alt="樱桃树" class="tree-image" />
       <h2>我的樱桃树</h2>
     </div>
 
@@ -90,54 +90,72 @@ const goBack = () => {
 </template>
 
 <style scoped>
+/* 全局样式 */
+* {
+  font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+  box-sizing: border-box;
+}
+
 .container {
   padding: 20px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: #e8f5e9;
 }
 
+/* 顶部导航 */
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 30px;
   position: relative;
+  height: 44px;
 }
 
 .back-button {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 20px;
   cursor: pointer;
   padding: 0;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
+  color: #333;
 }
 
 .header h1 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   text-align: center;
   flex: 1;
-  margin: 0 40px;
+  margin: 0 44px;
+  color: #333;
 }
 
 .empty {
-  width: 40px;
+  width: 44px;
 }
 
+/* 小树卡片 */
 .tree-card {
   background-color: white;
   color: #333;
   border-radius: 12px;
   padding: 20px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  margin-bottom: 24px;
   text-align: center;
+  transition: all 0.3s ease;
+}
+
+.tree-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .tree-image {
@@ -148,18 +166,22 @@ const goBack = () => {
 }
 
 .tree-card h2 {
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
+  color: #333;
+  margin: 0;
 }
 
+/* 共养成员 */
 .co-adopters-section {
-  margin-bottom: 30px;
+  margin-bottom: 24px;
 }
 
 .co-adopters-section h3 {
   font-size: 16px;
   font-weight: bold;
   margin-bottom: 15px;
+  color: #333;
 }
 
 .adopters-list {
@@ -167,6 +189,12 @@ const goBack = () => {
   gap: 20px;
   overflow-x: auto;
   padding-bottom: 10px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.adopters-list::-webkit-scrollbar {
+  display: none;
 }
 
 .adopter-item {
@@ -182,38 +210,67 @@ const goBack = () => {
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 10px;
-  border: 2px solid #4CAF50;
+  border: 2px solid #2e7d32;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
 }
 
 .adopter-name {
   font-size: 14px;
   text-align: center;
+  color: #333;
+  font-weight: 500;
 }
 
+/* 邀请卡片 */
 .invite-card {
-  background-color: #f5f5f5;
+  background-color: white;
   border-radius: 12px;
   padding: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 24px;
   text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.invite-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .invite-card p {
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.5;
-  margin-bottom: 20px;
-  color: #333;
+  margin: 0 0 20px 0;
+  color: #666;
 }
 
-.invite-card button {
+.btn-primary {
   padding: 12px 30px;
-  font-size: 16px;
+  font-size: 14px;
   font-weight: bold;
+  background-color: #2e7d32;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(46, 125, 50, 0.2);
 }
 
+.btn-primary:hover {
+  background-color: #1b5e20;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+}
+
+/* 规则说明 */
 .rules-section {
   margin-top: auto;
   margin-bottom: 20px;
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .rules-section h3 {
@@ -228,10 +285,12 @@ const goBack = () => {
   line-height: 1.5;
   color: #666;
   list-style: none;
+  margin: 0;
+  padding: 0;
 }
 
 .rules-section li {
-  margin-bottom: 5px;
+  margin-bottom: 8px;
   position: relative;
   padding-left: 15px;
 }
@@ -240,18 +299,66 @@ const goBack = () => {
   content: '•';
   position: absolute;
   left: 0;
-  color: #4CAF50;
+  color: #2e7d32;
   font-weight: bold;
+}
+
+/* 弹窗 */
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  max-width: 80%;
+  min-width: 280px;
+}
+
+.popup-content h3 {
+  margin-bottom: 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.popup-content button {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
+  .container {
+    padding: 16px;
+  }
+  
   .header h1 {
-    font-size: 18px;
+    font-size: 16px;
+    margin: 0 40px;
   }
   
   .back-button {
-    font-size: 20px;
+    font-size: 18px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .empty {
+    width: 40px;
   }
   
   .tree-image {
@@ -260,11 +367,11 @@ const goBack = () => {
   }
   
   .tree-card h2 {
-    font-size: 16px;
+    font-size: 15px;
   }
   
   .co-adopters-section h3 {
-    font-size: 14px;
+    font-size: 15px;
   }
   
   .adopter-avatar {
@@ -273,34 +380,61 @@ const goBack = () => {
   }
   
   .adopter-name {
-    font-size: 12px;
+    font-size: 13px;
   }
   
   .invite-card p {
-    font-size: 14px;
+    font-size: 13px;
   }
   
-  .invite-card button {
-    padding: 10px 20px;
-    font-size: 14px;
+  .btn-primary {
+    padding: 10px 24px;
+    font-size: 13px;
   }
   
   .rules-section h3 {
-    font-size: 12px;
+    font-size: 13px;
   }
   
   .rules-section ul {
-    font-size: 10px;
+    font-size: 11px;
+  }
+  
+  .popup-content {
+    padding: 24px;
+  }
+  
+  .popup-content h3 {
+    font-size: 16px;
   }
 }
 
 @media (max-width: 480px) {
-  .header h1 {
-    font-size: 16px;
+  .container {
+    padding: 12px;
+  }
+  
+  .header {
+    height: 40px;
   }
   
   .back-button {
-    font-size: 18px;
+    font-size: 16px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .header h1 {
+    font-size: 15px;
+    margin: 0 40px;
+  }
+  
+  .empty {
+    width: 40px;
+  }
+  
+  .tree-card {
+    padding: 16px;
   }
   
   .tree-image {
@@ -313,7 +447,7 @@ const goBack = () => {
   }
   
   .co-adopters-section h3 {
-    font-size: 12px;
+    font-size: 14px;
   }
   
   .adopter-avatar {
@@ -322,24 +456,49 @@ const goBack = () => {
   }
   
   .adopter-name {
-    font-size: 10px;
+    font-size: 12px;
+  }
+  
+  .invite-card {
+    padding: 16px;
   }
   
   .invite-card p {
     font-size: 12px;
   }
   
-  .invite-card button {
+  .btn-primary {
     padding: 8px 16px;
     font-size: 12px;
+    border-radius: 10px;
+  }
+  
+  .rules-section {
+    padding: 12px;
   }
   
   .rules-section h3 {
-    font-size: 10px;
+    font-size: 12px;
   }
   
   .rules-section ul {
-    font-size: 8px;
+    font-size: 10px;
+  }
+  
+  .popup-content {
+    padding: 20px;
+    max-width: 90%;
+    min-width: 260px;
+  }
+  
+  .popup-content h3 {
+    font-size: 14px;
+    margin-bottom: 16px;
+  }
+  
+  .popup-content button {
+    padding: 10px;
+    font-size: 13px;
   }
 }
 </style>
