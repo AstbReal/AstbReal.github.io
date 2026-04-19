@@ -43,8 +43,8 @@ const goBack = () => {
 
     <!-- 中部小树卡片 -->
     <div class="tree-card">
-      <img src="/images/cherry-tree.jpg" alt="樱桃树" class="tree-image" />
-      <h2>我的樱桃树</h2>
+      <img src="/images/adult-tree.jpg" alt="我的树" class="tree-image" />
+      <h2>我的树</h2>
     </div>
 
     <!-- 共养成员 -->
