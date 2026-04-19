@@ -8,8 +8,27 @@ const route = useRoute()
 // 从URL参数中获取树名
 const treeName = ref('樱桃树')
 
+// 生成随机昵称
+const generateRandomNickname = () => {
+  const adjectives = ['快乐的', '勇敢的', '聪明的', '善良的', '活泼的', '可爱的', '机智的', '温柔的', '热情的', '耐心的']
+  const nouns = ['园丁', '种植者', '环保者', '自然爱好者', '树友', '植物迷', '绿色守护者', '生态卫士', '果园主', '森林卫士']
+  const adjective = adjectives[Math.floor(Math.random() * adjectives.length)]
+  const noun = nouns[Math.floor(Math.random() * nouns.length)]
+  const number = Math.floor(Math.random() * 1000)
+  return `${adjective}${noun}${number}`
+}
+
+// 生成随机树名
+const generateRandomTreeName = (treeName) => {
+  const prefixes = ['我的', '可爱的', '茂盛的', '坚强的', '美丽的', '健康的', '茁壮成长的', '硕果累累的', '生机勃勃的', '枝繁叶茂的']
+  const suffixes = ['小树', '宝贝', '伙伴', '朋友', '希望', '奇迹', '守护者', '精灵', '明星', '冠军']
+  const prefix = prefixes[Math.floor(Math.random() * prefixes.length)]
+  const suffix = suffixes[Math.floor(Math.random() * suffixes.length)]
+  return `${prefix}${treeName}${suffix}`
+}
+
 // 表单数据
-const nickname = ref('')
+const nickname = ref(generateRandomNickname())
 const treeNickname = ref('')
 const years = ref(1)
 
@@ -31,6 +50,11 @@ const showPopup = ref(false)
 onMounted(() => {
   if (route.query.treeName) {
     treeName.value = route.query.treeName
+    // 为树名生成随机默认值
+    treeNickname.value = generateRandomTreeName(treeName.value)
+  } else {
+    // 如果没有树名，也为树名生成随机默认值
+    treeNickname.value = generateRandomTreeName(treeName.value)
   }
   if (route.query.price) {
     basePrice.value = parseInt(route.query.price)
