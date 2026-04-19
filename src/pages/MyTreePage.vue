@@ -26,13 +26,13 @@ const treeStage = computed(() => {
 const treeImage = computed(() => {
   switch (treeStage.value) {
     case 'seed':
-      return '/images/seed.jpg'
+      return 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/seed.jpg'
     case 'seedling':
-      return '/images/seedling.jpg'
+      return 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/seed.jpg'
     case 'adult':
-      return '/images/adult-tree.jpg'
+      return 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/cherry-tree.jpg'
     default:
-      return '/images/seed.jpg'
+      return 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/seed.jpg'
   }
 })
 

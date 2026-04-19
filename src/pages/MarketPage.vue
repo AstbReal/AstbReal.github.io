@@ -46,12 +46,12 @@ const getMarketPrice = (basePrice, fruitName) => {
 
 // 市集商品
 const marketItems = [
-  { id: 1, name: '樱桃', price: getMarketPrice(199, '樱桃'), stallName: '樱桃园', image: '/images/cherry-tree-landscape.jpg' },
-  { id: 2, name: '梨', price: getMarketPrice(249, '梨'), stallName: '梨园春色', image: '/images/pear-tree.jpg' },
-  { id: 3, name: '黄金油蟠', price: getMarketPrice(229, '黄金油蟠'), stallName: '桃花园', image: '/images/peach-tree.jpg' },
-  { id: 4, name: '阳光玫瑰', price: getMarketPrice(299, '阳光玫瑰'), stallName: '葡萄园', image: '/images/grape-tree.jpg' },
-  { id: 5, name: '红美人果冻橙', price: getMarketPrice(269, '红美人果冻橙'), stallName: '橙子园', image: '/images/orange-tree.jpg' },
-  { id: 6, name: '国庆一号无核蜜橘', price: getMarketPrice(239, '国庆一号无核蜜橘'), stallName: '橘子园', image: '/images/tangerine-tree.jpg' }
+  { id: 1, name: '樱桃', price: getMarketPrice(199, '樱桃'), stallName: '樱桃园', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/cherry-tree-landscape.jpg' },
+  { id: 2, name: '梨', price: getMarketPrice(249, '梨'), stallName: '梨园春色', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/pear-tree.jpg' },
+  { id: 3, name: '黄金油蟠', price: getMarketPrice(229, '黄金油蟠'), stallName: '桃花园', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/peach-tree.jpg' },
+  { id: 4, name: '阳光玫瑰', price: getMarketPrice(299, '阳光玫瑰'), stallName: '葡萄园', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/grape-tree.jpg' },
+  { id: 5, name: '红美人果冻橙', price: getMarketPrice(269, '红美人果冻橙'), stallName: '橙子园', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/orange-tree.jpg' },
+  { id: 6, name: '国庆一号无核蜜橘', price: getMarketPrice(239, '国庆一号无核蜜橘'), stallName: '橘子园', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/tangerine-tree.jpg' }
 ]
 
 // 打开弹窗

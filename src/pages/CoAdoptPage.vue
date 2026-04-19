@@ -7,11 +7,11 @@ const router = useRouter()
 // 弹窗状态
 const showPopup = ref(false)
 
-// 共养成员
-const coAdopters = [
-  { id: 1, name: '张三', avatar: '/images/avatar.jpg' },
-  { id: 2, name: '李四', avatar: '/images/avatar.jpg' },
-  { id: 3, name: '王五', avatar: '/images/avatar.jpg' }
+// 好友列表
+const friends = [
+  { id: 1, name: '张三', avatar: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/avatar.jpg' },
+  { id: 2, name: '李四', avatar: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/avatar.jpg' },
+  { id: 3, name: '王五', avatar: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/avatar.jpg' }
 ]
 
 // 打开弹窗
@@ -43,7 +43,7 @@ const goBack = () => {
 
     <!-- 中部小树卡片 -->
     <div class="tree-card">
-      <img src="/images/adult-tree.jpg" alt="我的树" class="tree-image" />
+      <img src="https://gitee.com/AstbReal/grow-up/raw/main/public/images/cherry-tree.jpg" alt="我的树" class="tree-image" />
       <h2>我的树</h2>
     </div>
 
