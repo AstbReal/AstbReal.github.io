@@ -26,13 +26,13 @@ const treeStage = computed(() => {
 const treeImage = computed(() => {
   switch (treeStage.value) {
     case 'seed':
-      return 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/seed.jpg'
+      return '/images/seed.jpg'
     case 'seedling':
-      return 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/seed.jpg'
+      return '/images/seedling.jpg'
     case 'adult':
-      return 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/cherry-tree.jpg'
+      return '/images/cherry-tree-landscape.jpg'
     default:
-      return 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/seed.jpg'
+      return '/images/seed.jpg'
   }
 })
 
@@ -52,6 +52,8 @@ onMounted(() => {
   // 从sessionStorage中获取用户昵称和树名
   const savedNickname = sessionStorage.getItem('userName')
   const savedTreeName = sessionStorage.getItem('treeName')
+  const savedHealthValue = sessionStorage.getItem('healthValue')
+  const savedGrowthProgress = sessionStorage.getItem('growthProgress')
   
   // 优先使用sessionStorage中的数据，如果没有则使用URL参数
   if (savedNickname) {
@@ -69,6 +71,14 @@ onMounted(() => {
     // 保存到sessionStorage
     sessionStorage.setItem('treeName', route.query.treeName)
   }
+  
+  // 加载健康值和成长进度
+  if (savedHealthValue) {
+    healthValue.value = parseInt(savedHealthValue)
+  }
+  if (savedGrowthProgress) {
+    growthProgress.value = parseInt(savedGrowthProgress)
+  }
 })
 
 // 打开弹窗
@@ -82,12 +92,21 @@ const closePopup = () => {
   showPopup.value = false
 }
 
+// 保存树状态到sessionStorage
+const saveTreeState = () => {
+  sessionStorage.setItem('healthValue', healthValue.value.toString())
+  sessionStorage.setItem('growthProgress', growthProgress.value.toString())
+}
+
 // 浇水
 const waterTree = () => {
   // 增加健康值，最多100
   healthValue.value = Math.min(healthValue.value + 10, 100)
   // 增加成长进度，最多100
   growthProgress.value = Math.min(growthProgress.value + 5, 100)
+  
+  // 保存状态
+  saveTreeState()
   
   // 检查是否达到100%
   if (growthProgress.value >= 100) {
@@ -104,6 +123,9 @@ const fertilizeTree = () => {
     healthValue.value = Math.min(healthValue.value + 15, 100)
     // 增加成长进度，最多100
     growthProgress.value = Math.min(growthProgress.value + 8, 100)
+    
+    // 保存状态
+    saveTreeState()
     
     // 检查是否达到100%
     if (growthProgress.value >= 100) {

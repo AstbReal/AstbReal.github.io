@@ -16,16 +16,16 @@ const activeTab = ref('fruit')
 
 // 树数据
 const trees = [
-  { id: 1, name: '樱桃树', price: 199, category: 'fruit', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/cherry-tree-landscape.jpg' },
-  { id: 3, name: '梨树', price: 249, category: 'fruit', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/pear-tree.jpg' },
-  { id: 4, name: '桃树', price: 229, category: 'fruit', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/peach-tree.jpg', variety: '黄金油蟠' },
-  { id: 5, name: '葡萄树', price: 299, category: 'fruit', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/grape-tree.jpg', variety: '阳光玫瑰' },
-  { id: 6, name: '橙子树', price: 269, category: 'fruit', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/orange-tree.jpg', variety: '红美人果冻橙', recommended: true },
-  { id: 7, name: '橘子树', price: 239, category: 'fruit', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/tangerine-tree.jpg', variety: '国庆一号无核蜜橘', recommended: true },
-  { id: 8, name: '樱花树', price: 399, category: 'ornamental', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/cherry-blossom.jpg' },
-  { id: 10, name: '银杏', price: 499, category: 'ornamental', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/ginkgo-tree.jpg' },
-  { id: 12, name: '玉兰', price: 399, category: 'memorial', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/magnolia-tree.jpg' },
-  { id: 14, name: '松柏', price: 699, category: 'memorial', image: 'https://gitee.com/AstbReal/grow-up/raw/main/public/images/pine-tree.jpg' }
+  { id: 1, name: '樱桃树', price: 199, category: 'fruit', image: '/images/cherry-tree-landscape.jpg' },
+  { id: 3, name: '梨树', price: 249, category: 'fruit', image: '/images/pear-tree.jpg' },
+  { id: 4, name: '桃树', price: 229, category: 'fruit', image: '/images/peach-tree.jpg', variety: '黄金油蟠' },
+  { id: 5, name: '葡萄树', price: 299, category: 'fruit', image: '/images/grape-tree.jpg', variety: '阳光玫瑰' },
+  { id: 6, name: '橙子树', price: 269, category: 'fruit', image: '/images/orange-tree.jpg', variety: '红美人果冻橙', recommended: true },
+  { id: 7, name: '橘子树', price: 239, category: 'fruit', image: '/images/tangerine-tree.jpg', variety: '国庆一号无核蜜橘', recommended: true },
+  { id: 8, name: '樱花树', price: 399, category: 'ornamental', image: '/images/cherry-blossom.jpg' },
+  { id: 10, name: '银杏', price: 499, category: 'ornamental', image: '/images/ginkgo-tree.jpg' },
+  { id: 12, name: '玉兰', price: 399, category: 'memorial', image: '/images/magnolia-tree.jpg' },
+  { id: 14, name: '松柏', price: 699, category: 'memorial', image: '/images/pine-tree.jpg' }
 ]
 
 // 根据选中的标签过滤树
